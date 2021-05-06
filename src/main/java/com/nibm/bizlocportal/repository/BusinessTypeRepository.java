@@ -12,6 +12,6 @@ import com.nibm.bizlocportal.model.BusinessType;
  *
  */
 @Repository
-public interface BusinessTypeRepository extends JpaRepository<BusinessType, Long> {
+public interface BusinessTypeRepository extends JpaRepository<BusinessType, Integer> {
 
 }

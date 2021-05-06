@@ -25,18 +25,22 @@ import com.nibm.bizlocportal.model.BusinessType;
 import com.nibm.bizlocportal.model.BusinessTypePlaceSize;
 import com.nibm.bizlocportal.model.BusinessTypeTargetGroup;
 import com.nibm.bizlocportal.model.ColomboZone;
+import com.nibm.bizlocportal.model.NearbyRestaurant;
 import com.nibm.bizlocportal.model.PlaceSize;
 import com.nibm.bizlocportal.model.PriceRange;
 import com.nibm.bizlocportal.model.TargetGroup;
+import com.nibm.bizlocportal.model.TopCuisines;
 import com.nibm.bizlocportal.model.User;
 import com.nibm.bizlocportal.repository.BusinessGoalRepository;
 import com.nibm.bizlocportal.repository.BusinessTypePlaceSizeRepository;
 import com.nibm.bizlocportal.repository.BusinessTypeRepository;
 import com.nibm.bizlocportal.repository.BusinessTypeTargetGroupRepository;
 import com.nibm.bizlocportal.repository.ColomboZoneRepository;
+import com.nibm.bizlocportal.repository.NearbyRestaurantRepository;
 import com.nibm.bizlocportal.repository.PlaceSizeRepository;
 import com.nibm.bizlocportal.repository.PriceRangeRepository;
 import com.nibm.bizlocportal.repository.TargetGroupRepository;
+import com.nibm.bizlocportal.repository.TopCuisinesRepository;
 import com.nibm.bizlocportal.repository.UserRepository;
 
 /**
@@ -44,7 +48,7 @@ import com.nibm.bizlocportal.repository.UserRepository;
  *
  */
 @ComponentScan(value = "com.nibm.bizlocportal")
-@CrossOrigin(origins="*",maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class IndexController {
@@ -76,6 +80,12 @@ public class IndexController {
 	@Autowired
 	UserRepository userRepository;
 
+	@Autowired
+	NearbyRestaurantRepository nearbyRestaurantRepository;
+
+	@Autowired
+	TopCuisinesRepository topCuisineRepository;
+
 	@GetMapping("/businessType")
 	public ResponseEntity<List<BusinessType>> getBusinessTypes() {
 		try {
@@ -93,7 +103,7 @@ public class IndexController {
 	}
 
 	@GetMapping("/businessType/{id}")
-	public ResponseEntity<BusinessType> getBusinessTypeById(@PathVariable("id") long id) {
+	public ResponseEntity<BusinessType> getBusinessTypeById(@PathVariable("id") Integer id) {
 		Optional<BusinessType> businessType = businessTypeRepository.findById(id);
 
 		if (businessType.isPresent()) {
@@ -115,7 +125,7 @@ public class IndexController {
 	}
 
 	@PutMapping("/businessType/{id}")
-	public ResponseEntity<BusinessType> updateBusinessType(@PathVariable("id") long id,
+	public ResponseEntity<BusinessType> updateBusinessType(@PathVariable("id") int id,
 			@RequestBody BusinessType businessType) {
 		Optional<BusinessType> businessTypeData = businessTypeRepository.findById(id);
 
@@ -145,7 +155,7 @@ public class IndexController {
 	}
 
 	@GetMapping("/businessGoal/{id}")
-	public ResponseEntity<BusinessGoal> getBusinessGoalById(@PathVariable("id") long id) {
+	public ResponseEntity<BusinessGoal> getBusinessGoalById(@PathVariable("id") int id) {
 		Optional<BusinessGoal> businessGoal = businessGoalRepository.findById(id);
 
 		if (businessGoal.isPresent()) {
@@ -167,7 +177,7 @@ public class IndexController {
 	}
 
 	@PutMapping("/businessGoal/{id}")
-	public ResponseEntity<BusinessGoal> updateBusinessGoal(@PathVariable("id") long id,
+	public ResponseEntity<BusinessGoal> updateBusinessGoal(@PathVariable("id") int id,
 			@RequestBody BusinessGoal businessGoal) {
 		Optional<BusinessGoal> businessGoalData = businessGoalRepository.findById(id);
 
@@ -197,7 +207,7 @@ public class IndexController {
 	}
 
 	@GetMapping("/businessTypePlaceSize/{id}")
-	public ResponseEntity<BusinessTypePlaceSize> getBusinessTypePlaceSizeById(@PathVariable("id") long id) {
+	public ResponseEntity<BusinessTypePlaceSize> getBusinessTypePlaceSizeById(@PathVariable("id") int id) {
 		Optional<BusinessTypePlaceSize> businessTypePlaceSize = businessTypePlaceSizeRepository.findById(id);
 
 		if (businessTypePlaceSize.isPresent()) {
@@ -208,7 +218,8 @@ public class IndexController {
 	}
 
 	@PostMapping("/businessTypePlaceSize")
-	public ResponseEntity<BusinessTypePlaceSize> createBusinessTypePlaceSize(@RequestBody BusinessTypePlaceSize businessTypePlaceSize) {
+	public ResponseEntity<BusinessTypePlaceSize> createBusinessTypePlaceSize(
+			@RequestBody BusinessTypePlaceSize businessTypePlaceSize) {
 		try {
 			BusinessTypePlaceSize _businessTypePlaceSize = businessTypePlaceSizeRepository.save(businessTypePlaceSize);
 			return new ResponseEntity<>(_businessTypePlaceSize, HttpStatus.CREATED);
@@ -219,7 +230,7 @@ public class IndexController {
 	}
 
 	@PutMapping("/businessTypePlaceSize/{id}")
-	public ResponseEntity<BusinessTypePlaceSize> updateBusinessTypePlaceSize(@PathVariable("id") long id,
+	public ResponseEntity<BusinessTypePlaceSize> updateBusinessTypePlaceSize(@PathVariable("id") int id,
 			@RequestBody BusinessTypePlaceSize businessTypePlaceSize) {
 		Optional<BusinessTypePlaceSize> businessTypePlaceSizeData = businessTypePlaceSizeRepository.findById(id);
 
@@ -232,7 +243,7 @@ public class IndexController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@GetMapping("/businessTypeTargetGroup")
 	public ResponseEntity<List<BusinessTypeTargetGroup>> getBusinessTypeTargetGroup() {
 		try {
@@ -250,7 +261,7 @@ public class IndexController {
 	}
 
 	@GetMapping("/businessTypeTargetGroup/{id}")
-	public ResponseEntity<BusinessTypeTargetGroup> getBusinessTypeTargetGroupById(@PathVariable("id") long id) {
+	public ResponseEntity<BusinessTypeTargetGroup> getBusinessTypeTargetGroupById(@PathVariable("id") int id) {
 		Optional<BusinessTypeTargetGroup> businessTypeTargetGroup = businessTypeTargetGroupRepository.findById(id);
 
 		if (businessTypeTargetGroup.isPresent()) {
@@ -261,9 +272,11 @@ public class IndexController {
 	}
 
 	@PostMapping("/businessTypeTargetGroup")
-	public ResponseEntity<BusinessTypeTargetGroup> createBusinessTypeTargetGroup(@RequestBody BusinessTypeTargetGroup businessTypeTargetGroup) {
+	public ResponseEntity<BusinessTypeTargetGroup> createBusinessTypeTargetGroup(
+			@RequestBody BusinessTypeTargetGroup businessTypeTargetGroup) {
 		try {
-			BusinessTypeTargetGroup _businessTypeTargetGroup = businessTypeTargetGroupRepository.save(businessTypeTargetGroup);
+			BusinessTypeTargetGroup _businessTypeTargetGroup = businessTypeTargetGroupRepository
+					.save(businessTypeTargetGroup);
 			return new ResponseEntity<>(_businessTypeTargetGroup, HttpStatus.CREATED);
 
 		} catch (Exception e) {
@@ -272,7 +285,7 @@ public class IndexController {
 	}
 
 	@PutMapping("/businessTypeTargetGroup/{id}")
-	public ResponseEntity<BusinessTypeTargetGroup> updateBusinessTypePlaceSize(@PathVariable("id") long id,
+	public ResponseEntity<BusinessTypeTargetGroup> updateBusinessTypePlaceSize(@PathVariable("id") int id,
 			@RequestBody BusinessTypeTargetGroup businessTypeTargetGroup) {
 		Optional<BusinessTypeTargetGroup> businessTypeTargetGroupData = businessTypeTargetGroupRepository.findById(id);
 
@@ -280,12 +293,13 @@ public class IndexController {
 			BusinessTypeTargetGroup _businessTypeTargetGroup = businessTypeTargetGroupData.get();
 			_businessTypeTargetGroup.setTargetGroup(businessTypeTargetGroup.getTargetGroup());
 			_businessTypeTargetGroup.setBusinessType(businessTypeTargetGroup.getBusinessType());
-			return new ResponseEntity<>(businessTypeTargetGroupRepository.save(_businessTypeTargetGroup), HttpStatus.OK);
+			return new ResponseEntity<>(businessTypeTargetGroupRepository.save(_businessTypeTargetGroup),
+					HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@GetMapping("/colomboZone")
 	public ResponseEntity<List<ColomboZone>> getColomboZone() {
 		try {
@@ -302,9 +316,36 @@ public class IndexController {
 		}
 	}
 
+	@GetMapping("/colomboZone/budget/{priceRangeId}")
+	public ResponseEntity<List<ColomboZone>> getColomboZoneByBudget(@PathVariable("priceRangeId") int priceRangeId) {
+		Optional<List<ColomboZone>> colomboZone = Optional.of(new ArrayList<ColomboZone>());
+		colomboZone = colomboZoneRepository.findByBudget(priceRangeId);
+
+		try {
+			if (colomboZone.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(colomboZone.get(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@GetMapping("/colomboZone/{id}")
-	public ResponseEntity<ColomboZone> getColomboZoneById(@PathVariable("id") long id) {
+	public ResponseEntity<ColomboZone> getColomboZoneById(@PathVariable("id") int id) {
 		Optional<ColomboZone> colomboZone = colomboZoneRepository.findById(id);
+
+		if (colomboZone.isPresent()) {
+			return new ResponseEntity<>(colomboZone.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("/colomboZone/zone/{zoneNumber}")
+	public ResponseEntity<ColomboZone> getColomboZoneByZoneId(@PathVariable("zoneNumber") String zoneNumber) {
+		Optional<ColomboZone> colomboZone = colomboZoneRepository.findByZonalNumber(zoneNumber);
 
 		if (colomboZone.isPresent()) {
 			return new ResponseEntity<>(colomboZone.get(), HttpStatus.OK);
@@ -325,23 +366,26 @@ public class IndexController {
 	}
 
 	@PutMapping("/colomboZone/{id}")
-	public ResponseEntity<ColomboZone> updateColomboZone(@PathVariable("id") long id,
+	public ResponseEntity<ColomboZone> updateColomboZone(@PathVariable("id") int id,
 			@RequestBody ColomboZone colomboZone) {
 		Optional<ColomboZone> colomboZoneData = colomboZoneRepository.findById(id);
 
 		if (colomboZoneData.isPresent()) {
 			ColomboZone _colomboZone = colomboZoneData.get();
 			_colomboZone.setFoodieIndex(colomboZone.getFoodieIndex());
-			_colomboZone.setName(colomboZone.getNightLifeIndex());
+			_colomboZone.setName(colomboZone.getName());
+			_colomboZone.setLat(colomboZone.getLat());
+			_colomboZone.setLongitude(colomboZone.getLongitude());
+			_colomboZone.setAverageCost(colomboZone.getAverageCost());
+			_colomboZone.setAverageRating(colomboZone.getAverageRating());
 			_colomboZone.setNightLifeIndex(colomboZone.getNightLifeIndex());
-			_colomboZone.setPlaceSize(colomboZone.getPlaceSize());
 			_colomboZone.setZonalNumber(colomboZone.getZonalNumber());
 			return new ResponseEntity<>(colomboZoneRepository.save(_colomboZone), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@GetMapping("/placeSize")
 	public ResponseEntity<List<PlaceSize>> getPlaceSize() {
 		try {
@@ -359,8 +403,19 @@ public class IndexController {
 	}
 
 	@GetMapping("/placeSize/{id}")
-	public ResponseEntity<PlaceSize> getPlaceSizeById(@PathVariable("id") long id) {
+	public ResponseEntity<PlaceSize> getPlaceSizeById(@PathVariable("id") int id) {
 		Optional<PlaceSize> placeSize = placeSizeRepository.findById(id);
+
+		if (placeSize.isPresent()) {
+			return new ResponseEntity<>(placeSize.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("/placeSize/colomboZone/{colomboZoneId}")
+	public ResponseEntity<PlaceSize> getPlaceSizeByColomboZoneId(@PathVariable("colomboZoneId") int colomboZoneId) {
+		Optional<PlaceSize> placeSize = placeSizeRepository.findByColomboZone(colomboZoneId);
 
 		if (placeSize.isPresent()) {
 			return new ResponseEntity<>(placeSize.get(), HttpStatus.OK);
@@ -381,20 +436,20 @@ public class IndexController {
 	}
 
 	@PutMapping("/placeSize/{id}")
-	public ResponseEntity<PlaceSize> updatePlaceSize(@PathVariable("id") long id,
-			@RequestBody PlaceSize placeSize) {
+	public ResponseEntity<PlaceSize> updatePlaceSize(@PathVariable("id") int id, @RequestBody PlaceSize placeSize) {
 		Optional<PlaceSize> placeSizeData = placeSizeRepository.findById(id);
 
 		if (placeSizeData.isPresent()) {
 			PlaceSize _placeSize = placeSizeData.get();
 			_placeSize.setPriceRange(placeSize.getPriceRange());
 			_placeSize.setSizing(placeSize.getSizing());
+			_placeSize.setColomboZone(placeSize.getColomboZone());
 			return new ResponseEntity<>(placeSizeRepository.save(_placeSize), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@GetMapping("/priceRange")
 	public ResponseEntity<List<PriceRange>> getpriceRange() {
 		try {
@@ -412,7 +467,7 @@ public class IndexController {
 	}
 
 	@GetMapping("/priceRange/{id}")
-	public ResponseEntity<PriceRange> getPriceRangeById(@PathVariable("id") long id) {
+	public ResponseEntity<PriceRange> getPriceRangeById(@PathVariable("id") int id) {
 		Optional<PriceRange> priceRange = priceRangeRepository.findById(id);
 
 		if (priceRange.isPresent()) {
@@ -434,8 +489,7 @@ public class IndexController {
 	}
 
 	@PutMapping("/priceRange/{id}")
-	public ResponseEntity<PriceRange> updatePriceRange(@PathVariable("id") long id,
-			@RequestBody PriceRange priceRange) {
+	public ResponseEntity<PriceRange> updatePriceRange(@PathVariable("id") int id, @RequestBody PriceRange priceRange) {
 		Optional<PriceRange> priceRangeData = priceRangeRepository.findById(id);
 
 		if (priceRangeData.isPresent()) {
@@ -446,7 +500,7 @@ public class IndexController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@GetMapping("/targetGroup")
 	public ResponseEntity<List<TargetGroup>> getTargetGroup() {
 		try {
@@ -464,7 +518,7 @@ public class IndexController {
 	}
 
 	@GetMapping("/targetGroup/{id}")
-	public ResponseEntity<TargetGroup> getTargetGroupById(@PathVariable("id") long id) {
+	public ResponseEntity<TargetGroup> getTargetGroupById(@PathVariable("id") int id) {
 		Optional<TargetGroup> targetGroup = targetGroupRepository.findById(id);
 
 		if (targetGroup.isPresent()) {
@@ -486,7 +540,7 @@ public class IndexController {
 	}
 
 	@PutMapping("/targetGroup/{id}")
-	public ResponseEntity<TargetGroup> updateTargetGroup(@PathVariable("id") long id,
+	public ResponseEntity<TargetGroup> updateTargetGroup(@PathVariable("id") int id,
 			@RequestBody TargetGroup targetGroup) {
 		Optional<TargetGroup> targetGroupData = targetGroupRepository.findById(id);
 
@@ -499,7 +553,7 @@ public class IndexController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@GetMapping("/user")
 	public ResponseEntity<List<User>> getUsers() {
 		try {
@@ -517,7 +571,7 @@ public class IndexController {
 	}
 
 	@GetMapping("/user/{id}")
-	public ResponseEntity<User> getUserId(@PathVariable("id") long id) {
+	public ResponseEntity<User> getUserId(@PathVariable("id") int id) {
 		Optional<User> user = userRepository.findById(id);
 
 		if (user.isPresent()) {
@@ -527,9 +581,14 @@ public class IndexController {
 		}
 	}
 
-	@PostMapping("/user")
-	public ResponseEntity<User> createUser(@RequestBody User user) {
+	@PostMapping("/user/{colomboZoneId}/{businessTypeId}/{priceRangeId}/{targetGroupId}")
+	public ResponseEntity<User> createUser(@PathVariable int colomboZoneId, @PathVariable int businessTypeId,
+			@PathVariable int priceRangeId, @PathVariable int targetGroupId, @RequestBody User user) {
 		try {
+			user.setBusinessType(new BusinessType(businessTypeId));
+			user.setColomboZone(new ColomboZone(colomboZoneId));
+			user.setPriceRange(new PriceRange(priceRangeId));
+			user.setTargetGroup(new TargetGroup(targetGroupId));
 			User _user = userRepository.save(user);
 			return new ResponseEntity<>(_user, HttpStatus.CREATED);
 
@@ -538,9 +597,8 @@ public class IndexController {
 		}
 	}
 
-	@PutMapping("/user/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable("id") long id,
-			@RequestBody User user) {
+	@PutMapping("/user/{id}/")
+	public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User user) {
 		Optional<User> userData = userRepository.findById(id);
 
 		if (userData.isPresent()) {
@@ -549,6 +607,145 @@ public class IndexController {
 			_user.setEmail(user.getEmail());
 			_user.setBusinessType(user.getBusinessType());
 			return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("/restaurant")
+	public ResponseEntity<List<NearbyRestaurant>> getRestaurant() {
+		try {
+			List<NearbyRestaurant> nearbyRestaurant = new ArrayList<NearbyRestaurant>();
+			nearbyRestaurantRepository.findAll().forEach(nearbyRestaurant::add);
+
+			if (nearbyRestaurant.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(nearbyRestaurant, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/restaurant/{id}")
+	public ResponseEntity<NearbyRestaurant> getRestaurantId(@PathVariable("id") int id) {
+		Optional<NearbyRestaurant> nearByRestaurant = nearbyRestaurantRepository.findById(id);
+
+		if (nearByRestaurant.isPresent()) {
+			return new ResponseEntity<>(nearByRestaurant.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("/restaurant/colomboZone/{colomboZoneId}")
+	public ResponseEntity<Optional<List<NearbyRestaurant>>> getRestaurantIdByColomboZoneId(
+			@PathVariable("colomboZoneId") int colomboZoneId) {
+		Optional<List<NearbyRestaurant>> nearByRestaurant = Optional.of(new ArrayList<NearbyRestaurant>());
+		nearByRestaurant = nearbyRestaurantRepository.findByColomboZone(colomboZoneId);
+		try {
+			if (nearByRestaurant.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(nearByRestaurant, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping("/restaurant")
+	public ResponseEntity<NearbyRestaurant> createRestaurant(@RequestBody NearbyRestaurant nearbyRestaurant) {
+		try {
+			NearbyRestaurant _nearbyRestaurant = nearbyRestaurantRepository.save(nearbyRestaurant);
+			return new ResponseEntity<>(_nearbyRestaurant, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PutMapping("/restaurant/{id}")
+	public ResponseEntity<NearbyRestaurant> updateRestaurant(@PathVariable("id") int id,
+			@RequestBody NearbyRestaurant nearbyRestaurant) {
+		Optional<NearbyRestaurant> restaurantData = nearbyRestaurantRepository.findById(id);
+
+		if (restaurantData.isPresent()) {
+			NearbyRestaurant _nearByRestaurant = restaurantData.get();
+			_nearByRestaurant.setRestaurantType(nearbyRestaurant.getRestaurantType());
+			_nearByRestaurant.setNoOfOutlets(nearbyRestaurant.getNoOfOutlets());
+			return new ResponseEntity<>(nearbyRestaurantRepository.save(_nearByRestaurant), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("/topCuisines")
+	public ResponseEntity<List<TopCuisines>> getTopCuisines() {
+		try {
+			List<TopCuisines> topCuisines = new ArrayList<TopCuisines>();
+			topCuisineRepository.findAll().forEach(topCuisines::add);
+
+			if (topCuisines.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(topCuisines, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/topCuisines/{id}")
+	public ResponseEntity<TopCuisines> getTopCuisines(@PathVariable("id") int id) {
+		Optional<TopCuisines> topCuisines = topCuisineRepository.findById(id);
+
+		if (topCuisines.isPresent()) {
+			return new ResponseEntity<>(topCuisines.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("/topCuisines/colomboZone/{colomboZoneId}")
+	public ResponseEntity<Optional<List<TopCuisines>>> getTopCuisinesByColomboId(
+			@PathVariable("colomboZoneId") int colomboZoneId) {
+		Optional<List<TopCuisines>> topCuisines = Optional.of(new ArrayList<TopCuisines>());
+		topCuisines = topCuisineRepository.findByColomboZoneId(colomboZoneId);
+
+		try {
+			if (topCuisines.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(topCuisines, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping("/topCuisines")
+	public ResponseEntity<TopCuisines> createTopCuisines(@RequestBody TopCuisines topCuisines) {
+		try {
+			TopCuisines _topCuisines = topCuisineRepository.save(topCuisines);
+			return new ResponseEntity<>(_topCuisines, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PutMapping("/topCuisines/{id}")
+	public ResponseEntity<TopCuisines> updateTopCuisines(@PathVariable("id") int id,
+			@RequestBody TopCuisines topCuisines) {
+		Optional<TopCuisines> topCuisinesData = topCuisineRepository.findById(id);
+
+		if (topCuisinesData.isPresent()) {
+			TopCuisines _topCuisines = topCuisinesData.get();
+			_topCuisines.setName(topCuisines.getName());
+			_topCuisines.setColomboZone(topCuisines.getColomboZone());
+			return new ResponseEntity<>(topCuisineRepository.save(_topCuisines), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

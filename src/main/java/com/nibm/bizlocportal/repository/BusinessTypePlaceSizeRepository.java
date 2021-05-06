@@ -11,6 +11,6 @@ import com.nibm.bizlocportal.model.BusinessTypePlaceSize;
  * @author lily2
  *
  */
-public interface BusinessTypePlaceSizeRepository extends JpaRepository<BusinessTypePlaceSize, Long> {
+public interface BusinessTypePlaceSizeRepository extends JpaRepository<BusinessTypePlaceSize, Integer> {
 
 }

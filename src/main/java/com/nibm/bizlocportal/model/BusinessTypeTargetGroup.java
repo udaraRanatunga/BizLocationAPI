@@ -15,7 +15,7 @@ public class BusinessTypeTargetGroup {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private int id;
 	
 	@ManyToOne
 	private BusinessType businessType;
@@ -28,14 +28,14 @@ public class BusinessTypeTargetGroup {
 		// TODO Auto-generated constructor stub
 	}
 
-	public BusinessTypeTargetGroup(long id, BusinessType businessType, TargetGroup targetGroup) {
+	public BusinessTypeTargetGroup(int id, BusinessType businessType, TargetGroup targetGroup) {
 		super();
 		this.id = id;
 		this.businessType = businessType;
 		this.targetGroup = targetGroup;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 

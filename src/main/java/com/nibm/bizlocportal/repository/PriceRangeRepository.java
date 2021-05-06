@@ -11,6 +11,6 @@ import com.nibm.bizlocportal.model.PriceRange;
  * @author lily2
  *
  */
-public interface PriceRangeRepository extends JpaRepository<PriceRange, Long> {
+public interface PriceRangeRepository extends JpaRepository<PriceRange, Integer> {
 
 }

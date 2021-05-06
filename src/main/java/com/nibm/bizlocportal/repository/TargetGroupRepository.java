@@ -11,6 +11,6 @@ import com.nibm.bizlocportal.model.TargetGroup;
  * @author lily2
  *
  */
-public interface TargetGroupRepository extends JpaRepository<TargetGroup, Long> {
+public interface TargetGroupRepository extends JpaRepository<TargetGroup, Integer> {
 
 }

@@ -20,7 +20,7 @@ public class BusinessType {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private int id;
 	
 	@Column(name= "DESCRIPTION")
 	private String description;
@@ -29,14 +29,18 @@ public class BusinessType {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	public BusinessType(int id) {
+		super();
+		this.id = id;;
+	}
 
-	public BusinessType(long id, String description) {
+	public BusinessType(int id, String description) {
 		super();
 		this.id = id;
 		this.description = description;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 

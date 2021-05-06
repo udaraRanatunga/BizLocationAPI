@@ -19,7 +19,7 @@ import javax.persistence.Table;
 public class BusinessTypePlaceSize {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private int id;
 	
 	@ManyToOne
 	private BusinessType businessType;
@@ -32,14 +32,14 @@ public class BusinessTypePlaceSize {
 		// TODO Auto-generated constructor stub
 	}
 
-	public BusinessTypePlaceSize(long id, BusinessType businessType, PlaceSize placeSize) {
+	public BusinessTypePlaceSize(int id, BusinessType businessType, PlaceSize placeSize) {
 		super();
 		this.id = id;
 		this.businessType = businessType;
 		this.placeSize = placeSize;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 

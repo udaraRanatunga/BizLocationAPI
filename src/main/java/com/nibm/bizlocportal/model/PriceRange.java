@@ -15,7 +15,7 @@ public class PriceRange {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private int id;
 	
 	@Column(name= "RANGE")
 	private String range;
@@ -25,9 +25,13 @@ public class PriceRange {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	public PriceRange(int id) {
+		super();
+		this.id = id;
+	}
 
 
-	public PriceRange(long id, String range) {
+	public PriceRange(int id, String range) {
 		super();
 		this.id = id;
 		this.range = range;

@@ -20,7 +20,7 @@ public class TargetGroup {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private int id;
 	
 	@Column(name= "TARGET_GROUP")
 	private String targetGroup;
@@ -32,15 +32,18 @@ public class TargetGroup {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-	public TargetGroup(long id, String targetGroup, String purchasePower) {
+	public TargetGroup(int id) {
+		super();
+		this.id = id;
+	}
+	public TargetGroup(int id, String targetGroup, String purchasePower) {
 		super();
 		this.id = id;
 		this.targetGroup = targetGroup;
 		this.purchasePower = purchasePower;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 

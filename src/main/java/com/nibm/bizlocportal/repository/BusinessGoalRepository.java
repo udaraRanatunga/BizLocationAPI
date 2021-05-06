@@ -12,7 +12,7 @@ import com.nibm.bizlocportal.model.BusinessGoal;
  *
  */
 @Repository
-public interface BusinessGoalRepository extends JpaRepository<BusinessGoal, Long> {
+public interface BusinessGoalRepository extends JpaRepository<BusinessGoal, Integer> {
 
 	
 
